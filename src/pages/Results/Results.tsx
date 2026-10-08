@@ -1,14 +1,17 @@
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "../../components/Button/Button";
-import type { Card } from "../../types/card";
+import { ConfirmModal } from "../../components/ConfirmModal/ConfirmModal";
+import type { GroupedCard } from "../../types/card";
 import type { Pod } from "../../types/player";
 import { PlayerPermanents } from "../../components/PlayerCards/PlayerPermanents";
 import { PLAYER_COLORS } from "../../constants/playerColors";
+import type { ScrambledCards } from "../../utils/scrambleCards";
 
 interface ResultsProps {
   pod: Pod;
-  scrambledCards: Record<string, Card[]>;
+  scrambledCards: ScrambledCards;
   currentPlayerIndex: number;
   onBack: () => void;
   onNext: () => void;
@@ -23,14 +26,17 @@ export function Results({
   onNext,
   onBackToSetup,
 }: ResultsProps) {
+  // Leaving discards the results, so Finish and "Back to Card List" ask first.
+  const [isConfirmingLeave, setIsConfirmingLeave] = useState(false);
+
   const player = pod[currentPlayerIndex];
-  const playerColor = PLAYER_COLORS[player.color];
 
   if (!player) {
     return null;
   }
 
   const cards = scrambledCards[player.id] ?? [];
+  const playerColor = PLAYER_COLORS[player.color];
 
   const isFirstPlayer = currentPlayerIndex === 0;
   const isLastPlayer = currentPlayerIndex === pod.length - 1;
@@ -53,78 +59,161 @@ export function Results({
         }
 
         return map;
-      }, new Map<string, { name: string; quantity: number; ownerId: string }>())
+      }, new Map<string, GroupedCard>())
       .values(),
   );
 
   return (
-    <main className="flex min-h-screen flex-col bg-slate-50">
-      <div className="mx-auto w-full max-w-md flex-1 px-4 py-6">
-        {/* Top navigation */}
+    <main className="flex min-h-screen flex-col bg-night text-cream">
+      <div className="mx-auto w-full max-w-md flex-1 px-5 py-6">
+
         <header className="mb-6 flex items-center justify-between">
           <button
             type="button"
-            onClick={onBackToSetup}
-            className="flex items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-slate-900"
+            onClick={() => setIsConfirmingLeave(true)}
+            className="
+              flex items-center gap-2
+              text-sm font-semibold
+              text-gold
+              hover:text-gold-light
+            "
           >
-            <ArrowLeft size={18} />
+            <ArrowLeft size={17} />
             Back to Card List
           </button>
 
-          <span className="rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-red-500">
-            {player.name}'s Cards
+          <span
+            className="
+              rounded-full
+              border
+              border-gold
+              bg-bark
+              px-3 py-1
+              text-[10px]
+              font-bold
+              uppercase
+              tracking-wide
+              text-gold-light
+            "
+          >
+            {player.name}'s Permanents
           </span>
         </header>
 
-        {/* Player summary */}
         <section
-          className="mb-6 rounded-3xl px-6 py-7 text-center text-white shadow-lg"
+          className="
+            mb-7
+            rounded-2xl
+            border-2
+            p-4
+          "
           style={{
-            backgroundColor: playerColor.bg,
+            borderColor: playerColor.bright,
+            boxShadow: `0 0 16px ${playerColor.bright}40`,
           }}
         >
-          <p className="text-xs font-bold uppercase tracking-wide text-white/70">
-            Cards Assigned To
-          </p>
+          <div
+            className="
+              rounded-xl
+              border
+              px-5 py-6
+              text-center
+            "
+            style={{
+              borderColor: `${playerColor.bright}80`,
+              backgroundColor: "var(--color-bark)",
+            }}
+          >
+            <p
+              className="text-[10px] font-bold uppercase tracking-wide"
+              style={{
+                color: playerColor.bright,
+              }}
+            >
+              Permanents Assigned To
+            </p>
 
-          <h1 className="mt-2 text-4xl font-bold">{player.name}</h1>
+            <h1
+              className="mt-2 text-4xl font-bold"
+              style={{
+                color: playerColor.bright,
+              }}
+            >
+              {player.name}
+            </h1>
 
-          <div className="mx-auto mt-4 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-sm font-medium">
-            <span className="h-2 w-2 rounded-full bg-emerald-300" />
-            {cards.length} cards total
+            <div
+              className="
+                mx-auto mt-4
+                inline-flex
+                items-center gap-2
+                rounded-full
+                border
+                px-4 py-1
+                text-sm font-semibold
+              "
+              style={{
+                borderColor: `${playerColor.bright}80`,
+                color: "var(--color-sand)",
+              }}
+            >
+              <span
+                className="h-2 w-2 rounded-full"
+                style={{
+                  backgroundColor: playerColor.bright,
+                }}
+              />
+              {cards.length} permanents total
+            </div>
           </div>
         </section>
 
-        {/* Hand */}
+
         <PlayerPermanents player={player} cards={groupedCards} pod={pod} />
       </div>
 
-      {/* Bottom navigation */}
-      <footer className="sticky bottom-0 border-t border-slate-200 bg-white p-4">
-        <div className="mx-auto flex w-full max-w-md gap-4">
+      <footer
+        className="
+          border-t
+          border-rust
+          bg-night
+          p-4
+        "
+      >
+        <div className="mx-auto flex w-full max-w-md gap-3">
           <Button
             variant="secondary"
             fullWidth
             disabled={isFirstPlayer}
             onClick={onBack}
           >
-            <ArrowLeft size={18} />
+            <ArrowLeft size={17} />
             Back
           </Button>
 
           {isLastPlayer ? (
-            <Button fullWidth onClick={onBackToSetup}>
-              <CheckCircle2 size={18} />
+            <Button fullWidth onClick={() => setIsConfirmingLeave(true)}>
+              <CheckCircle2 size={17} />
               Finish
             </Button>
           ) : (
             <Button fullWidth onClick={onNext}>
               Next Player
-              <ArrowRight size={18} />
+              <ArrowRight size={17} />
             </Button>
           )}
         </div>
       </footer>
+
+      <ConfirmModal
+        open={isConfirmingLeave}
+        title="Finish the Scramble?"
+        message="This ends the Scramble and returns to setup. You can't reopen these results."
+        confirmLabel="Finish"
+        confirmIcon={<CheckCircle2 size={17} />}
+        onConfirm={onBackToSetup}
+        onCancel={() => setIsConfirmingLeave(false)}
+      />
     </main>
   );
 }

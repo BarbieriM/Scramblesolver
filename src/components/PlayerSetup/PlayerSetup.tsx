@@ -2,37 +2,27 @@ import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 import { PLAYER_COLORS } from "../../constants/playerColors";
-import type {
-  Player,
-  PlayerColor,
-  Pod,
-} from "../../types/player";
+import { Button } from "../Button/Button";
+import type { Player, PlayerColor, Pod } from "../../types/player";
 
 interface PlayerSetupProps {
   pod: Pod;
   onChange: (pod: Pod) => void;
 }
 
-export function PlayerSetup({
-  pod,
-  onChange,
-}: PlayerSetupProps) {
+export function PlayerSetup({ pod, onChange }: PlayerSetupProps) {
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
 
-  function updatePlayer(
-    playerId: string,
-    changes: Partial<Player>,
-  ) {
+  function updatePlayer(playerId: string, changes: Partial<Player>) {
     onChange(
       pod.map((player) =>
-        player.id === playerId
-          ? { ...player, ...changes }
-          : player,
+        player.id === playerId ? { ...player, ...changes } : player,
       ),
     );
   }
 
-  const currentPlayer = pod[currentPlayerIndex];
+  const playerIndex = Math.min(currentPlayerIndex, pod.length - 1);
+  const currentPlayer = pod[playerIndex];
 
   if (!currentPlayer) {
     return null;
@@ -40,31 +30,49 @@ export function PlayerSetup({
 
   const playerColor = PLAYER_COLORS[currentPlayer.color];
 
-  const isFirstPlayer = currentPlayerIndex === 0;
-  const isLastPlayer = currentPlayerIndex === pod.length - 1;
+  const isFirstPlayer = playerIndex === 0;
+  const isLastPlayer = playerIndex === pod.length - 1;
 
   return (
-    <section className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-bold uppercase tracking-wide text-slate-600">
-          Players
-        </h2>
+    <section
+      className="
+        rounded-xl
+        border
+        border-gold
+        bg-parchment-dark
+        p-4
+        shadow-card
+      "
+    >
+      <div
+        className="
+          space-y-4
+          rounded-lg
+          border
+          border-copper
+          bg-parchment
+          p-3
+        "
+      >
+        <div className="flex items-center justify-between text-ink-muted">
+          <h2 className="text-[10px] font-bold uppercase tracking-wide">
+            Players
+          </h2>
 
-        <span className="text-sm font-medium text-slate-500">
-          {currentPlayerIndex + 1} / {pod.length}
-        </span>
-      </div>
+          <span className="text-xs font-bold">
+            {playerIndex + 1} / {pod.length}
+          </span>
+        </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-4">
-        <div className="mb-3 flex items-center gap-3">
+        <div className="flex items-center gap-3">
           <span
-            className="h-4 w-4 rounded-full"
+            className="h-4 w-4 shrink-0 rounded-full border border-rust"
             style={{
-              backgroundColor: playerColor.bg,
+              backgroundColor: playerColor.solid,
             }}
           />
 
-          <span className="font-semibold text-slate-800">
+          <span className="truncate font-bold text-ink">
             {currentPlayer.name}
           </span>
         </div>
@@ -77,78 +85,94 @@ export function PlayerSetup({
               name: event.target.value,
             })
           }
-          placeholder={`Player ${currentPlayerIndex + 1}`}
-          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+          placeholder={`Player ${playerIndex + 1}`}
+          aria-label="Player name"
+          className="
+            w-full
+            rounded-lg
+            border
+            border-rust
+            bg-cream
+            px-4 py-3
+            text-ink-light
+            outline-none
+            placeholder:text-tan
+            focus:border-gold
+            focus:ring-2
+            focus:ring-gold/30
+          "
         />
 
-        <div className="mt-4">
-          <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+        <div>
+          <p
+            className="
+              mb-2 block
+              text-[10px]
+              font-bold
+              uppercase
+              tracking-wide
+              text-ink-muted
+            "
+          >
             Color
           </p>
 
           <div className="flex flex-wrap gap-2">
-            {(Object.keys(PLAYER_COLORS) as PlayerColor[]).map(
-              (color) => {
-                const config = PLAYER_COLORS[color];
+            {(Object.keys(PLAYER_COLORS) as PlayerColor[]).map((color) => {
+              const config = PLAYER_COLORS[color];
 
-                const selected = currentPlayer.color === color;
+              const selected = currentPlayer.color === color;
 
-                return (
-                  <button
-                    key={color}
-                    type="button"
-                    onClick={() =>
-                      updatePlayer(currentPlayer.id, {
-                        color,
-                      })
-                    }
-                    aria-label={`${config.name} color`}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border-2 transition hover:scale-105"
-                    style={{
-                      backgroundColor: config.bg,
-                      borderColor: selected
-                        ? config.bg
-                        : "transparent",
-                    }}
-                  >
-                    {selected && (
-                      <Check
-                        size={16}
-                        className="text-white"
-                      />
-                    )}
-                  </button>
-                );
-              },
-            )}
+              return (
+                <button
+                  key={color}
+                  type="button"
+                  onClick={() =>
+                    updatePlayer(currentPlayer.id, {
+                      color,
+                    })
+                  }
+                  aria-label={`${config.name} color`}
+                  aria-pressed={selected}
+                  className={`
+                    flex h-9 w-9 items-center justify-center
+                    rounded-full
+                    border-2
+                    transition
+                    hover:scale-105
+                    ${selected ? "border-ink ring-2 ring-ink/30" : "border-rust/40"}
+                  `}
+                  style={{
+                    backgroundColor: config.solid,
+                  }}
+                >
+                  {selected && <Check size={16} className="text-white" />}
+                </button>
+              );
+            })}
           </div>
         </div>
 
         {/* Navigation */}
-        <div className="mt-6 flex justify-between gap-3">
-          <button
+        <div className="flex justify-between gap-3">
+          <Button
             type="button"
+            variant="secondary"
             disabled={isFirstPlayer}
-            onClick={() =>
-              setCurrentPlayerIndex((index) => index - 1)
-            }
-            className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
+            onClick={() => setCurrentPlayerIndex(playerIndex - 1)}
           >
             <ChevronLeft size={18} />
             Back
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
             disabled={isLastPlayer}
-            onClick={() =>
-              setCurrentPlayerIndex((index) => index + 1)
-            }
-            className="flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
+            onClick={() => setCurrentPlayerIndex(playerIndex + 1)}
           >
             Next
             <ChevronRight size={18} />
-          </button>
+          </Button>
         </div>
       </div>
     </section>

@@ -2,77 +2,59 @@ import type { PlayerColor } from "../types/player";
 
 export interface PlayerColorConfig {
   name: string;
-  bg: string;
-  text: string;
-  border: string;
-  lightBg: string;
+  // Fills: swatches, pills and dots. Readable on parchment and under white icons.
+  solid: string;
+  // Text, icons and borders on the dark backgrounds (at least 4.5:1).
+  bright: string;
 }
 
-export const PLAYER_COLORS: Record<
-  PlayerColor,
-  PlayerColorConfig
-> = {
-  purple: {
-    name: "Purple",
-    bg: "#4F46E5",
-    text: "#4F46E5",
-    border: "#4F46E5",
-    lightBg: "#EEF2FF",
+// Jewel tones kept clear of the theme's golds and browns.
+export const PLAYER_COLORS: Record<PlayerColor, PlayerColorConfig> = {
+  amethyst: {
+    name: "Amethyst",
+    solid: "#7E22CE",
+    bright: "#C79BFF",
   },
 
-  blue: {
-    name: "Blue",
-    bg: "#2563EB",
-    text: "#2563EB",
-    border: "#2563EB",
-    lightBg: "#EFF6FF",
+  sapphire: {
+    name: "Sapphire",
+    solid: "#1D4ED8",
+    bright: "#7DA2FF",
   },
 
-  green: {
-    name: "Green",
-    bg: "#16A34A",
-    text: "#16A34A",
-    border: "#16A34A",
-    lightBg: "#F0FDF4",
+  emerald: {
+    name: "Emerald",
+    solid: "#047857",
+    bright: "#34D399",
   },
 
-  orange: {
-    name: "Orange",
-    bg: "#EA580C",
-    text: "#EA580C",
-    border: "#EA580C",
-    lightBg: "#FFF7ED",
+  crimson: {
+    name: "Crimson",
+    solid: "#B91C1C",
+    bright: "#F87171",
   },
 
-  red: {
-    name: "Red",
-    bg: "#DC2626",
-    text: "#DC2626",
-    border: "#DC2626",
-    lightBg: "#FEF2F2",
+  rose: {
+    name: "Rose",
+    solid: "#BE185D",
+    bright: "#F472B6",
   },
 
-  pink: {
-    name: "Pink",
-    bg: "#DB2777",
-    text: "#DB2777",
-    border: "#DB2777",
-    lightBg: "#FDF2F8",
+  teal: {
+    name: "Teal",
+    solid: "#0E7490",
+    bright: "#22D3EE",
   },
 
-  cyan: {
-    name: "Cyan",
-    bg: "#0891B2",
-    text: "#0891B2",
-    border: "#0891B2",
-    lightBg: "#ECFEFF",
+  silver: {
+    name: "Silver",
+    solid: "#475569",
+    bright: "#E2E8F0",
   },
 
-  yellow: {
-    name: "Yellow",
-    bg: "#CA8A04",
-    text: "#CA8A04",
-    border: "#CA8A04",
-    lightBg: "#FEFCE8",
+  lime: {
+    name: "Lime",
+    solid: "#4D7C0F",
+    bright: "#A3E635",
   },
 };

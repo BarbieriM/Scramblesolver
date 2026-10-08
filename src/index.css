@@ -1,31 +1,112 @@
 @import "tailwindcss";
 
-:root {
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+@theme static {
+  /* ========================================
+     COLORS
+     ======================================== */
 
-  color: #111827;
-  background: #f8fafc;
+  /* Dark backgrounds */
+  --color-night: #1a0f06;
+  --color-night-deep: #1f0c04;
+  --color-night-hover: #261408;
+  --color-soot: #2c1a0e;
+  --color-bark: #3c1a0a;
+  --color-bark-dark: #32180a;
+  --color-bark-hover: #4b210c;
+  --color-bark-light: #5c2e0a;
+
+  /* Browns */
+  --color-umber: #6b3515;
+  --color-rust: #8b4513;
+  --color-rust-muted: #8b5a3c;
+  --color-walnut: #8b5a2b;
+  --color-copper: #a86618;
+  --color-ember: #b94b13;
+  --color-wine: #7a1a00;
+  --color-danger: #b3261e;
+  --color-danger-hover: #c8372c;
+  --color-danger-light: #f2a49c;
+
+  /* Golds */
+  --color-gold: #c8860a;
+  --color-gold-hover: #d99a16;
+  --color-gold-light: #f0c040;
+  --color-ochre: #d9a43b;
+
+  /* Parchment */
+  --color-parchment-dark: #d9ad4c;
+  --color-parchment: #ecd28d;
+  --color-parchment-light: #f0d68d;
+  --color-cream: #fdf4de;
+  --color-cream-light: #fff4d6;
+  --color-sand: #f0dfb5;
+  --color-sand-muted: #ead7b3;
+  --color-tan: #a87550;
+  --color-tan-light: #c89e78;
+
+  /* Ink (dark text on parchment) */
+  --color-ink: #3b1808;
+  --color-ink-light: #54230b;
+  --color-ink-muted: #66300e;
+
+  /* ========================================
+     SHADOWS
+     ======================================== */
+
+  --shadow-gold: 0 0 14px rgba(200, 134, 10, 0.35);
+  --shadow-gold-strong: 0 0 20px rgba(240, 192, 64, 0.45);
+  --shadow-gold-button: 0 3px 10px rgba(200, 134, 10, 0.35);
+  --shadow-card: 0 3px 10px rgba(0, 0, 0, 0.35);
+  --shadow-card-dark: 0 3px 10px rgba(0, 0, 0, 0.4);
+  --shadow-card-sm: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
+
+:root {
+  /* ========================================
+     RADIUS
+     ======================================== */
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+}
+
 
 * {
   box-sizing: border-box;
 }
 
-body {
+html,
+body,
+#root {
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100%;
+}
+
+body {
+  background: var(--color-night-deep);
+  color: var(--color-cream);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  -webkit-font-smoothing: antialiased;
 }
 
 button,
 input,
 select {
   font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
 }
