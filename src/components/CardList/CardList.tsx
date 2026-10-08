@@ -14,28 +14,44 @@ export function CardList({
   pod,
   onRemove,
 }: CardListProps) {
-const totalCards = cards.length;
+  const totalCards = cards.reduce(
+    (total, card) => total + card.quantity,
+    0,
+  );
 
   return (
     <section className="space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-bold uppercase tracking-wide text-slate-600">
+        <h2
+          className="
+            text-xs
+            font-bold
+            uppercase
+            tracking-wide
+            text-ochre
+          "
+        >
           Entered Cards
         </h2>
 
-        <span className="text-sm font-semibold text-indigo-600">
+        <span className="text-xs font-semibold text-gold">
           {totalCards} total cards
         </span>
       </div>
 
       {cards.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-5 py-10 text-center">
-          <p className="font-medium text-slate-500">
+        <div
+          className="
+            rounded-xl
+            border border-dashed
+            border-umber
+            bg-soot
+            px-5 py-8
+            text-center
+          "
+        >
+          <p className="font-medium text-tan">
             No cards added yet.
-          </p>
-
-          <p className="mt-1 text-sm text-slate-400">
-            Add cards above to build your list.
           </p>
         </div>
       ) : (

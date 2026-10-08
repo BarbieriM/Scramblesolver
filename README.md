@@ -1,75 +1,26 @@
-# React + TypeScript + Vite
+# Scrambleverse Solver
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small web app for resolving the Magic: The Gathering card **Scrambleverse** at the table.
 
-Currently, two official plugins are available:
+Live: https://barbierim.github.io/Scramblesolver/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## How it works
 
-## React Compiler
+1. **Set up the Pod**: choose the number of players and give each one a name and color.
+2. **Enter the Cards**: add each nonland permanent on the battlefield with its quantity and Owner.
+3. **Scramble**: every Card goes to a randomly chosen player. The split doesn't have to be even, and a Card can land back with its Owner.
+4. **Step through the results**: go player by player to see which Permanents each one now controls, and whose they are.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+See [GLOSSARY.md](./GLOSSARY.md) for the meaning of Pod, Owner, Card, Permanent and Scramble.
 
-## Expanding the ESLint configuration
+## Development
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Built with React, TypeScript, Vite and Tailwind CSS.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```sh
+yarn          # install dependencies
+yarn dev      # start the dev server
+yarn build    # type-check and build to dist/
+yarn lint     # run ESLint
+yarn deploy   # publish dist/ to GitHub Pages (run yarn build first)
 ```

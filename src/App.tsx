@@ -4,7 +4,7 @@ import { Results } from "./pages/Results/Results";
 import { Setup } from "./pages/Setup/Setup";
 
 import type { CardEntry } from "./types/card";
-import type { Pod, PlayerColor } from "./types/player";
+import type { Player, Pod, PlayerColor } from "./types/player";
 
 import {
   ExpandCardEntries,
@@ -14,29 +14,49 @@ import {
 
 type AppScreen = "setup" | "results";
 
+const INITIAL_PLAYER_COUNT = 4;
+
 const DEFAULT_PLAYER_COLORS: PlayerColor[] = [
-  "purple",
-  "blue",
-  "green",
-  "orange",
-  "red",
-  "pink",
-  "cyan",
-  "yellow",
+  "amethyst",
+  "sapphire",
+  "emerald",
+  "crimson",
+  "rose",
+  "teal",
+  "silver",
+  "lime",
 ];
 
-function createPod(count: number): Pod {
-  return Array.from({ length: count }, (_, index) => ({
+function createPlayer(index: number): Player {
+  return {
     id: String(index + 1),
     name: `Player ${index + 1}`,
     color: DEFAULT_PLAYER_COLORS[index % DEFAULT_PLAYER_COLORS.length],
-  }));
+  };
+}
+
+function createPod(count: number): Pod {
+  return Array.from({ length: count }, (_, index) => createPlayer(index));
+}
+
+// Adds or removes players at the end so everyone else keeps their name and color.
+function resizePod(pod: Pod, count: number): Pod {
+  if (count <= pod.length) {
+    return pod.slice(0, count);
+  }
+
+  return [
+    ...pod,
+    ...Array.from({ length: count - pod.length }, (_, index) =>
+      createPlayer(pod.length + index),
+    ),
+  ];
 }
 
 function App() {
   const [screen, setScreen] = useState<AppScreen>("setup");
 
-  const [pod, setPod] = useState<Pod>(() => createPod(4));
+  const [pod, setPod] = useState<Pod>(() => createPod(INITIAL_PLAYER_COUNT));
 
   const [cardEntries, setCardEntries] = useState<CardEntry[]>([]);
 
@@ -47,15 +67,14 @@ function App() {
   const allCards = useMemo(() => ExpandCardEntries(cardEntries), [cardEntries]);
 
   function handlePlayerCountChange(count: number) {
-    setPod(createPod(count));
+    const nextPod = resizePod(pod, count);
+    const playerIds = new Set(nextPod.map((player) => player.id));
 
-    // Owner selections become invalid when the pod changes.
+    setPod(nextPod);
+
+    // A removed player's cards leave the game with them.
     setCardEntries((currentCards) =>
-      currentCards.filter((card) => {
-        const playerNumber = Number(card.ownerId);
-
-        return playerNumber <= count;
-      }),
+      currentCards.filter((card) => playerIds.has(card.ownerId)),
     );
   }
 
@@ -69,6 +88,24 @@ function App() {
 
   function handleRemoveCard(id: string) {
     setCardEntries((current) => current.filter((card) => card.id !== id));
+  }
+
+  const initialPod = createPod(INITIAL_PLAYER_COUNT);
+
+  const isInitialState =
+    cardEntries.length === 0 &&
+    pod.length === initialPod.length &&
+    pod.every(
+      (player, index) =>
+        player.name === initialPod[index].name &&
+        player.color === initialPod[index].color,
+    );
+
+  function handleReset() {
+    setPod(createPod(INITIAL_PLAYER_COUNT));
+    setCardEntries([]);
+    setScrambledCards({});
+    setCurrentPlayerIndex(0);
   }
 
   function handleScramble() {
@@ -117,6 +154,8 @@ function App() {
       onAddCard={handleAddCard}
       onRemoveCard={handleRemoveCard}
       onScramble={handleScramble}
+      canReset={!isInitialState}
+      onReset={handleReset}
     />
   );
 }

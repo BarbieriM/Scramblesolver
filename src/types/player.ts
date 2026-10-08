@@ -1,12 +1,12 @@
 export type PlayerColor =
-  | "purple"
-  | "blue"
-  | "green"
-  | "orange"
-  | "red"
-  | "pink"
-  | "cyan"
-  | "yellow";
+  | "amethyst"
+  | "sapphire"
+  | "emerald"
+  | "crimson"
+  | "rose"
+  | "teal"
+  | "silver"
+  | "lime";
 
 export interface Player {
   id: string;

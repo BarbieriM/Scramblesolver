@@ -16,44 +16,76 @@ export function CardListItem({ card, pod, onRemove }: CardListItemProps) {
   const ownerColor = owner ? PLAYER_COLORS[owner.color] : undefined;
 
   return (
-    <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+    <div
+      className="
+        flex
+        items-center
+        justify-between
+        rounded-lg
+        border
+        border-copper
+        bg-parchment-light
+        px-3 py-3
+        shadow-card-sm
+      "
+    >
       <div className="flex min-w-0 items-center gap-3">
-        <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-500">
+        <span
+          className="
+            flex
+            h-8 w-8
+            shrink-0
+            items-center
+            justify-center
+            rounded-full
+            bg-ember
+            text-xs
+            font-bold
+            text-cream-light
+          "
+        >
           x{card.quantity}
         </span>
 
-        <span className="truncate font-medium text-slate-800">{card.name}</span>
+        <span
+          className="
+            truncate
+            font-bold
+            text-ink
+          "
+        >
+          {card.name}
+        </span>
       </div>
 
-      <div className="ml-3 flex shrink-0 items-center gap-3">
-        <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
-          {owner && ownerColor && (
-            <span
-              className="flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold"
-              style={{
-                backgroundColor: ownerColor.lightBg,
-                color: ownerColor.text,
-              }}
-            >
-              <span
-                className="h-2 w-2 rounded-full"
-                style={{
-                  backgroundColor: ownerColor.bg,
-                }}
-              />
-
-              {owner.name}
-            </span>
-          )}{" "}
-        </span>
+      <div className="ml-2 flex shrink-0 items-center gap-2">
+        {owner && ownerColor && (
+          <span
+            className="
+              rounded-full
+              px-3 py-1
+              text-[10px]
+              font-bold
+              text-white
+            "
+            style={{
+              backgroundColor: ownerColor.solid,
+            }}
+          >
+            {owner.name}
+          </span>
+        )}
 
         <button
           type="button"
           onClick={() => onRemove(card.id)}
-          className="rounded-lg p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-500"
+          className="
+            text-rust
+            hover:text-red-700
+          "
           aria-label={`Remove ${card.name}`}
         >
-          <X size={17} />
+          <X size={16} />
         </button>
       </div>
     </div>

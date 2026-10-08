@@ -1,9 +1,8 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  variant?: "primary" | "secondary" | "dark" | "ghost";
+  variant?: "primary" | "secondary" | "dark" | "ghost" | "danger";
   fullWidth?: boolean;
 }
 
@@ -15,14 +14,46 @@ export function Button({
   ...props
 }: ButtonProps) {
   const variants = {
-    primary:
-      "bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm",
-    secondary:
-      "bg-slate-100 text-slate-800 hover:bg-slate-200",
-    dark:
-      "bg-slate-900 text-white hover:bg-slate-800",
-    ghost:
-      "bg-transparent text-slate-600 hover:bg-slate-100",
+    primary: `
+      border
+      border-gold-light
+      bg-gold
+      text-cream-light
+      shadow-gold-button
+      hover:bg-gold-hover
+    `,
+
+    secondary: `
+      border
+      border-umber
+      bg-bark
+      text-ochre
+      hover:bg-bark-hover
+    `,
+
+    dark: `
+      border
+      border-rust
+      bg-night
+      text-gold-light
+      shadow-card-dark
+      hover:bg-night-hover
+    `,
+
+    danger: `
+      border
+      border-danger-light
+      bg-danger
+      text-cream-light
+      shadow-card-dark
+      hover:bg-danger-hover
+    `,
+
+    ghost: `
+      bg-transparent
+      text-gold
+      hover:bg-bark
+    `,
   };
 
   return (
@@ -35,12 +66,12 @@ export function Button({
         rounded-xl
         px-5
         py-3
-        font-semibold
-        transition
+        font-bold
+        transition-all
         duration-150
         cursor-pointer
         disabled:cursor-not-allowed
-        disabled:opacity-50
+        disabled:opacity-40
         ${variants[variant]}
         ${fullWidth ? "w-full" : ""}
         ${className}
